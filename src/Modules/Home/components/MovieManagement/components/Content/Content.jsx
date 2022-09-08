@@ -19,6 +19,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 // Scss
 import './content.scss';
@@ -26,14 +27,56 @@ import './content.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { getMovies } from '../../../../slices/movieListSlice';
 // Main
+// Global Variable
+
+const columns = [
+  { id: 'name', label: 'ID', minWidth: 120 },
+  { id: 'code', label: 'Name', minWidth: 170 },
+  {
+    id: 'image',
+    label: 'Image',
+    minWidth: 200,
+    align: 'left',
+  },
+  {
+    id: 'description',
+    label: 'Description',
+    minWidth: 300,
+    align: 'center',
+  },
+  {
+    id: 'action',
+    label: 'Action',
+    minWidth: 100,
+    align: 'center',
+  },
+];
+
+function createData(name, code, population, size) {
+  const density = population / size;
+  return { name, code, population, size, density };
+}
 export default function Content() {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
   const dispatch = useDispatch();
   const { movies, isLoading, error } = useSelector((state) => state.movieList);
+
   React.useEffect(() => {
     dispatch(getMovies());
   }, []);
   return (
-    <Paper sx={{ maxWidth: 1100, margin: 'auto', overflow: 'hidden' }}>
+    <Paper sx={{ maxWidth: 1170, margin: 'auto', overflow: 'hidden' }}>
       <AppBar
         position="static"
         color="default"
@@ -58,7 +101,7 @@ export default function Content() {
             </Grid>
             <Grid item>
               <Button variant="contained" sx={{ mr: 1 }}>
-                Add movie
+                Add Movie
               </Button>
               <Tooltip title="Reload">
                 <IconButton>
@@ -69,71 +112,77 @@ export default function Content() {
           </Grid>
         </Toolbar>
       </AppBar>
-      <Typography
-        className="content__table"
-        sx={{ my: 5, mx: 2 }}
-        color="text.secondary"
-        align="center"
-      >
-        <TableContainer className="content__table" component={Paper}>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell align="center">Name</TableCell>
-                <TableCell align="center">Image</TableCell>
-                <TableCell align="center">Description</TableCell>
-                <TableCell align="center"></TableCell>
+                {columns.map((column) => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {movies.map((movie) => (
-                <TableRow
-                  key={movie.maPhim}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{ fontSize: '1rem', fontWeight: '500' }}
-                  >
-                    {movie.maPhim}
-                  </TableCell>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    sx={{ fontSize: '1rem', fontWeight: 'bold' }}
-                  >
-                    {movie.tenPhim}
-                  </TableCell>
-                  <img
-                    className="content__img"
-                    src={movie.hinhAnh}
-                    alt={movie.tenPhim}
-                    srcset=""
-                  />
-                  <TableCell align="left">{movie.moTa}</TableCell>
-                  <TableCell align="left">
-                    <Button variant="outlined">
-                      <EditIcon></EditIcon>
-                    </Button>
-                    <Button
-                      sx={{
-                        color: 'red',
-                        borderColor: 'red',
-                        marginTop: '10px',
-                      }}
-                      variant="outlined"
+              {movies
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((movie) => {
+                  return (
+                    <TableRow
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={movie.maPhim}
                     >
-                      <DeleteIcon />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <TableCell sx={{ fontWeight: 'bold' }} align="">
+                        {movie.maPhim}
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }} align="">
+                        {movie.tenPhim}
+                      </TableCell>
+                      <TableCell align="">
+                        <img
+                          className="content__img"
+                          src={movie.hinhAnh}
+                          alt={movie.tenPhim}
+                        />
+                      </TableCell>
+                      <TableCell align="">
+                        {movie.moTa.length > 50
+                          ? movie.moTa.substr(0, 60) + '...'
+                          : movie.moTa}
+                      </TableCell>
+                      <TableCell align="">
+                        <EditIcon
+                          className="mr-2 cursor-pointer"
+                          sx={{ color: 'blue' }}
+                        />
+                        <DeleteIcon
+                          className="ml-2 cursor-pointer"
+                          sx={{ color: 'red' }}
+                        />
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </Table>
         </TableContainer>
-      </Typography>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={movies.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
     </Paper>
   );
 }

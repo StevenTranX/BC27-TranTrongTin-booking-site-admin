@@ -3,7 +3,7 @@ const movieAPI = {
   getMovies: () => {
     return axiosClient.get('QuanLyPhim/LayDanhSachPhim', {
       params: {
-        maNhom: 'GP09',
+        maNhom: 'GP01',
       },
     });
   },
