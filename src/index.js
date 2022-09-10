@@ -7,6 +7,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { createTheme, palette, ThemeProvider } from '@mui/system';
+import 'tw-elements';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const theme = createTheme({
   palette: {

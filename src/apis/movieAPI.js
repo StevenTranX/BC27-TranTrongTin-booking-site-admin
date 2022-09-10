@@ -7,5 +7,14 @@ const movieAPI = {
       },
     });
   },
+  addMovies: (movie) => {
+    const formData = new FormData();
+    for (let key in movie) {
+      formData.append(key, movie[key]);
+    }
+    formData.append('maNhom', 'GP01');
+    console.log(formData);
+    return axiosClient.post('QuanLyPhim/ThemPhimUploadHinh', formData);
+  },
 };
 export default movieAPI;

@@ -3,7 +3,7 @@ import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import { format, parse } from 'date-fns';
+import moment from 'moment';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -15,7 +15,10 @@ import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { SignalCellularNullTwoTone } from '@mui/icons-material';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+// redux
+import { useDispatch } from 'react-redux';
+import { addMovies } from '../../../../slices/movieListSlice';
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -68,9 +71,9 @@ const IOSSwitch = styled((props) => (
   },
 }));
 const ContentForm = () => {
+  const dispatch = useDispatch();
   const [date, setDate] = useState(new Date());
-
-  const { register, control, handleSubmit } = useForm({
+  const { register, control, handleSubmit, setValue } = useForm({
     defaultValue: {
       tenPhim: '',
       trailer: '',
@@ -82,12 +85,21 @@ const ContentForm = () => {
       hinhAnh: {},
     },
   });
-  // const handleSubmit = () => {
-  //   return null;
+  // const handleChangeDate = (event) => {
+
   // };
+  const handleUpload = (event) => {
+    const file = event.target.files[0];
+    setValue('hinhAnh', file);
+  };
   const onSubmit = (value) => {
+    const formattedDate = moment(value.ngayKhoiChieu).format('DD/MM/YYYY');
+    setValue('ngayKhoiChieu', formattedDate);
+
+    dispatch(addMovies(value));
     console.log(value);
   };
+
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -115,15 +127,13 @@ const ContentForm = () => {
           defaultValue={date}
           control={control}
           render={({ field: { onChange, ...restField } }) => (
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <LocalizationProvider dateAdapter={AdapterMoment}>
               <DatePicker
-                // ampm={false}
-                format="DD-MM-YYYY"
-                inputFormat="MM/dd/yyyy"
-                label="Showing Day"
+                inputFormat="DD/MM/YYYY"
+                label="Request Date"
                 onChange={(event) => {
                   onChange(event);
-                  setDate(event);
+                  // handleChangeDate(event);
                 }}
                 renderInput={(params) => <TextField {...params} />}
                 {...restField}
@@ -131,7 +141,6 @@ const ContentForm = () => {
             </LocalizationProvider>
           )}
         />
-
         <FormControlLabel
           control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
           label="is Showing"
@@ -149,7 +158,12 @@ const ContentForm = () => {
         />
         <Button variant="contained" component="label">
           Upload File
-          <input type="file" hidden />
+          <input
+            type="file"
+            hidden
+            {...register('hinhAnh')}
+            onChange={handleUpload}
+          />
         </Button>
         <Button type="submit" variant="contained">
           Submit
