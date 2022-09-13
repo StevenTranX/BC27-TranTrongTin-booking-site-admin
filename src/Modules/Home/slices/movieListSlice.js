@@ -20,13 +20,27 @@ export const getMovies = createAsyncThunk(
 );
 export const addMovies = createAsyncThunk(
   'Home/MovieManagement/ContentForm/addMovies',
-  async (value, { rejectWithValue }) => {
+  async (value, { rejectWithValue, dispatch }) => {
     try {
       await movieAPI.addMovies(value);
       console.log(value);
+      dispatch(getMovies());
       alert('Add Movie SuccessFully');
     } catch (error) {
       alert('Add Movie Failed');
+      return rejectWithValue(error.response?.data.content);
+    }
+  }
+);
+export const deleteMovies = createAsyncThunk(
+  'Home/MovieManagement/ContentForm/deleteMovies',
+  async (value, { rejectWithValue, dispatch }) => {
+    try {
+      await movieAPI.deleteMovies(value);
+      dispatch(getMovies());
+      alert('Delete Movie SuccessFully');
+    } catch (error) {
+      alert('Delete Movie Failed');
       return rejectWithValue(error.response?.data.content);
     }
   }
@@ -46,9 +60,6 @@ const movieListSlice = createSlice({
     builder.addCase(getMovies.rejected, (state, action) => {
       state.error = action.payload;
       state.isLoading = false;
-    });
-    builder.addCase(addMovies.fulfilled, (state, action) => {
-      getMovies();
     });
   },
 });

@@ -25,7 +25,7 @@ import TableRow from '@mui/material/TableRow';
 import './content.scss';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { getMovies } from '../../../../slices/movieListSlice';
+import { getMovies, deleteMovies } from '../../../../slices/movieListSlice';
 // Main
 // Global Variable
 
@@ -52,13 +52,10 @@ const columns = [
   },
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
-}
 export default function Content() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const dispatch = useDispatch();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -68,8 +65,9 @@ export default function Content() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
-
-  const dispatch = useDispatch();
+  const handleDeleteMovie = (movieID) => {
+    dispatch(deleteMovies(movieID));
+  };
   const { movies, isLoading, error } = useSelector((state) => state.movieList);
 
   React.useEffect(() => {
@@ -139,25 +137,25 @@ export default function Content() {
                       tabIndex={-1}
                       key={movie.maPhim}
                     >
-                      <TableCell sx={{ fontWeight: 'bold' }} align="">
+                      <TableCell sx={{ fontWeight: 'bold' }}>
                         {movie.maPhim}
                       </TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }} align="">
+                      <TableCell sx={{ fontWeight: 'bold' }}>
                         {movie.tenPhim}
                       </TableCell>
-                      <TableCell align="">
+                      <TableCell align="center">
                         <img
                           className="content__img"
                           src={movie.hinhAnh}
                           alt={movie.tenPhim}
                         />
                       </TableCell>
-                      <TableCell align="">
+                      <TableCell align="left">
                         {movie.moTa.length > 50
                           ? movie.moTa.substr(0, 60) + '...'
                           : movie.moTa}
                       </TableCell>
-                      <TableCell align="">
+                      <TableCell align="center">
                         <EditIcon
                           className="mr-2 cursor-pointer"
                           sx={{ color: 'blue' }}
@@ -165,6 +163,9 @@ export default function Content() {
                         <DeleteIcon
                           className="ml-2 cursor-pointer"
                           sx={{ color: 'red' }}
+                          onClick={() => {
+                            handleDeleteMovie(movie.maPhim);
+                          }}
                         />
                       </TableCell>
                     </TableRow>

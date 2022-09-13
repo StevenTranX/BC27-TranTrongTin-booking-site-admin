@@ -7,6 +7,7 @@ import moment from 'moment';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import Avatar from '@mui/material/Avatar';
 // SWITCH
 import { styled } from '@mui/material/styles';
 import FormGroup from '@mui/material/FormGroup';
@@ -71,8 +72,9 @@ const IOSSwitch = styled((props) => (
   },
 }));
 const ContentForm = () => {
-  const dispatch = useDispatch();
   const [date, setDate] = useState(new Date());
+  const [imgSrc, setImgSrc] = useState('');
+  const dispatch = useDispatch();
   const { register, control, handleSubmit, setValue } = useForm({
     defaultValue: {
       tenPhim: '',
@@ -85,17 +87,22 @@ const ContentForm = () => {
       hinhAnh: {},
     },
   });
-  // const handleChangeDate = (event) => {
-
-  // };
+  const handleChangeDate = (event) => {
+    const formattedDate = moment(event).format('DD/MM/YYYY');
+    setValue('ngayKhoiChieu', formattedDate);
+  };
   const handleUpload = (event) => {
     const file = event.target.files[0];
     setValue('hinhAnh', file);
+    if (!file) return;
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+    fileReader.onload = (evt) => {
+      setImgSrc(evt.target.result);
+    };
   };
   const onSubmit = (value) => {
-    const formattedDate = moment(value.ngayKhoiChieu).format('DD/MM/YYYY');
-    setValue('ngayKhoiChieu', formattedDate);
-
+    handleChangeDate(value.ngayKhoiChieu);
     dispatch(addMovies(value));
     console.log(value);
   };
@@ -132,8 +139,8 @@ const ContentForm = () => {
                 inputFormat="DD/MM/YYYY"
                 label="Request Date"
                 onChange={(event) => {
+                  handleChangeDate(event);
                   onChange(event);
-                  // handleChangeDate(event);
                 }}
                 renderInput={(params) => <TextField {...params} />}
                 {...restField}
@@ -165,6 +172,7 @@ const ContentForm = () => {
             onChange={handleUpload}
           />
         </Button>
+        <Avatar alt="Image" src={imgSrc} sx={{ width: 100, height: 100 }} />
         <Button type="submit" variant="contained">
           Submit
         </Button>

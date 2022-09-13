@@ -9,22 +9,14 @@ import { BrowserRouter } from 'react-router-dom';
 import { createTheme, palette, ThemeProvider } from '@mui/system';
 import 'tw-elements';
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const theme = createTheme({
-  palette: {
-    primary: {
-      color: '#ccc',
-    },
-  },
-});
+
 root.render(
   <React.StrictMode>
-    {/* <ThemeProvider> */}
     <Provider store={store}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </Provider>
-    {/* </ThemeProvider> */}
   </React.StrictMode>
 );
 
