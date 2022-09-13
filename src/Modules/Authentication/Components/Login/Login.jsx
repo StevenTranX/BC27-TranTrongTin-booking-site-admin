@@ -1,3 +1,4 @@
+// MUI 5 
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,7 +13,13 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
+// redux
+import {useDispatch , useSelector} from 'react-redux'
+import { login } from '../../slices/authSlice';
+//react-hook-form
+import { useForm } from 'react-hook-form';
+// router
+import { useNavigate } from 'react-router-dom';
 function Copyright(props) {
   return (
     <Typography
@@ -34,16 +41,39 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
-
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const {user} = useSelector((state) => state.auth)
+  const {handleSubmit, register } = useForm({
+    defaultValues : {
+      taiKhoan : '', 
+      matKhau : '',
+    }, 
+    mode : 'onTouched',
+  })
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  // };
+  const onSubmit = async (values) => {
+    try {
+      await dispatch(login(values)).unwrap()
+      alert('success')
+      navigate('/')
+    } catch (error) {
+      alert(error)
+    }
+    if (user) {
+      return navigate('/')
+    }
+  }
   return (
+    <div>
+    <form onSubmit = {handleSubmit(onSubmit)}>
     <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
@@ -81,9 +111,6 @@ export default function Login() {
               Sign in
             </Typography>
             <Box
-              component="form"
-              noValidate
-              onSubmit={handleSubmit}
               sx={{ mt: 1 }}
             >
               <TextField
@@ -91,10 +118,11 @@ export default function Login() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                label="Username"
+                name="taiKhoan"
+                autoComplete="username"
                 autoFocus
+                {...register('taiKhoan')}
               />
               <TextField
                 margin="normal"
@@ -105,6 +133,7 @@ export default function Login() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                {...register('matKhau')}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -136,5 +165,7 @@ export default function Login() {
         </Grid>
       </Grid>
     </ThemeProvider>
+    </form>
+    </div>
   );
 }
