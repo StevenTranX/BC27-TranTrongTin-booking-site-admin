@@ -14,6 +14,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import useRequest from '../../../../hooks/useRequest';
+import authAPI from '../../../../apis/authAPI';
 function Copyright(props) {
   return (
     <Typography
@@ -46,8 +48,14 @@ export default function Register() {
     },
     mode: 'onTouched',
   });
-  const onSubmit = (values) => {
-    console.log(values);
+  const {data : requestRegister, isLoading, error} = useRequest( (values) => authAPI.register(values), {isManual : true,})
+  const onSubmit = async (values) => {
+    try {
+      await requestRegister(values)
+      navigate('/login')
+    } catch (error) {
+      alert(error)
+    }
   };
 
   return (

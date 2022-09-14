@@ -8,8 +8,6 @@ const Home = () => {
   return (
     <div>
       <MovieManagement />
-      <Register />
-      <Login />
     </div>
   );
 };

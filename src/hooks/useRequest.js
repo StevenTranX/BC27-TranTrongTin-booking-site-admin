@@ -7,32 +7,40 @@ const initialState = {
   error: false,
 };
 const reducer = (state, action) => {
-  switch (type) {
+  switch (action.type) {
     case 'RESQUEST_PENDING':
       return { ...state, isLoading: true, error: null };
     case 'RESQUEST_FULFILLED':
-      return { ...state, isLoading: false };
+      return { ...state,  data : action.payload };
     case 'REQUEST_REJECTED':
-      return { ...state, isLoading: false };
+      return { ...state,  error : action.payload};
+      case 'REQUEST_FINAL':
+        return { ...state, isLoading: false };
     default:
       return state;
   }
 };
-const useRequest = (fn, { isManual = false, deps = [] }) => {
+const useRequest = (fn, config = {} ) => {
+  const { isManual = false, deps = [] } = config
   const [state, dispatch] = useReducer(reducer, initialState);
   const request = async (...params) => {
     try {
       dispatch({ type: 'RESQUEST_PENDING' });
       const data = await fn(...params);
-      dispatch({ type: 'REQUEST_FULFILLED', payload: data });
+      return data
     } catch (error) {
-      dispatch({ type: 'REQUEST_REJECTED', payload: error });
+      throw error
+    } finally {
+      dispatch({ type: 'REQUEST_FINAL'})
     }
   };
 
   useEffect(() => {
-    if ((isManual = false)) {
-      request();
+    if (!isManual) {
+
+      request()
+      .then( (data) => {dispatch({ type: 'RESQUEST_FULFILLED', payload : data })})
+      .catch( (error) => {  dispatch({ type: 'REQUEST_REJECTED', payload: error })})
     }
   }, deps);
   const result = isManual ? request : state.data;

@@ -10,6 +10,7 @@ import Content from './components/Content/Content';
 import Header from './components/Headers/Header';
 
 import ContentForm from './components/Content/ContentForm';
+import { Outlet } from 'react-router-dom';
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -203,8 +204,7 @@ export default function MovieManagement() {
             component="main"
             sx={{ flex: 1, py: 6, px: 3, bgcolor: '#eaeff1' }}
           >
-            <Content />
-            <ContentForm />
+         <Outlet/>
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
             <Copyright />
