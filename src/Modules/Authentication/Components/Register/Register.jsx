@@ -36,7 +36,7 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Register() {
+const Register = () => {
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -48,13 +48,17 @@ export default function Register() {
     },
     mode: 'onTouched',
   });
-  const {data : requestRegister, isLoading, error} = useRequest( (values) => authAPI.register(values), {isManual : true,})
+  const {
+    data: requestRegister,
+    isLoading,
+    error,
+  } = useRequest((values) => authAPI.register(values), { isManual: true });
   const onSubmit = async (values) => {
     try {
-      await requestRegister(values)
-      navigate('/login')
+      await requestRegister(values);
+      navigate('/login');
     } catch (error) {
-      alert(error)
+      alert(error);
     }
   };
 
@@ -169,4 +173,5 @@ export default function Register() {
       </ThemeProvider>
     </form>
   );
-}
+};
+export default Register;

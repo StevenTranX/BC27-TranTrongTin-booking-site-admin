@@ -26,6 +26,9 @@ import './content.scss';
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { getMovies, deleteMovies } from '../../../../slices/movieListSlice';
+// router-dom
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 // Main
 // Global Variable
 
@@ -56,7 +59,7 @@ export default function Content() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -98,7 +101,13 @@ export default function Content() {
               />
             </Grid>
             <Grid item>
-              <Button variant="contained" sx={{ mr: 1 }}>
+              <Button
+                onClick={() => {
+                  navigate('admin/addMovie');
+                }}
+                variant="contained"
+                sx={{ mr: 1 }}
+              >
                 Add Movie
               </Button>
               <Tooltip title="Reload">
@@ -156,10 +165,12 @@ export default function Content() {
                           : movie.moTa}
                       </TableCell>
                       <TableCell align="center">
-                        <EditIcon
-                          className="mr-2 cursor-pointer"
-                          sx={{ color: 'blue' }}
-                        />
+                        <Link to={`admin/updateMovie/${movie.maPhim}`}>
+                          <EditIcon
+                            className="mr-2 cursor-pointer"
+                            sx={{ color: 'blue' }}
+                          />
+                        </Link>
                         <DeleteIcon
                           className="ml-2 cursor-pointer"
                           sx={{ color: 'red' }}

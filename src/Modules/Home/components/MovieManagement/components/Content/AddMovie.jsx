@@ -71,7 +71,7 @@ const IOSSwitch = styled((props) => (
     }),
   },
 }));
-const ContentForm = () => {
+const AddMovie = () => {
   const [date, setDate] = useState(new Date());
   const [imgSrc, setImgSrc] = useState('');
   const dispatch = useDispatch();
@@ -181,4 +181,4 @@ const ContentForm = () => {
   );
 };
 
-export default ContentForm;
+export default AddMovie;

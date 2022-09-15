@@ -9,7 +9,7 @@ import Navigator from './components/Navigator/Navigator';
 import Content from './components/Content/Content';
 import Header from './components/Headers/Header';
 
-import ContentForm from './components/Content/ContentForm';
+import ContentForm from './components/Content/AddMovie';
 import { Outlet } from 'react-router-dom';
 function Copyright() {
   return (
@@ -204,7 +204,7 @@ export default function MovieManagement() {
             component="main"
             sx={{ flex: 1, py: 6, px: 3, bgcolor: '#eaeff1' }}
           >
-         <Outlet/>
+            <Outlet />
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
             <Copyright />
