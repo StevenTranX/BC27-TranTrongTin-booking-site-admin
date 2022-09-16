@@ -2,19 +2,15 @@ import React from 'react';
 import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
 import moment from 'moment';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import Avatar from '@mui/material/Avatar';
+
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import Avatar from '@mui/material/Avatar';
 // SWITCH
 import { styled } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 // redux

@@ -1,15 +1,16 @@
 import * as React from 'react';
+
+import Navigator from './components/Navigator/Navigator';
+import Content from './components/Content/Content';
+import Header from './components/Headers/Header';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
-import Navigator from './components/Navigator/Navigator';
-import Content from './components/Content/Content';
-import Header from './components/Headers/Header';
 
-import ContentForm from './components/Content/AddMovie';
 import { Outlet } from 'react-router-dom';
 function Copyright() {
   return (
