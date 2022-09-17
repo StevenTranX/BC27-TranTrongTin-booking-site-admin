@@ -1,4 +1,3 @@
-import store from '../store';
 import axios from 'axios';
 
 const axiosClient = axios.create({
@@ -10,20 +9,20 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use((config) => {
-  const { accessToken } = store.getState().auth.user || {};
-  console.log(accessToken);
+  const { accessToken } = JSON.parse(localStorage.getItem('user')).data.content || {};
   if (accessToken) {
     config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
-axiosClient.interceptors.response.use(
-  (response) => {
-    return response.data.content;
-  },
-  (error) => {
-    return Promise.reject(error.response?.data.content);
-  }
-);
+
+// axiosClient.interceptors.response.use(
+//   (response) => {
+//     return response.data.content;
+//   },
+//   (error) => {
+//     return Promise.reject(error.response?.data.content);
+//   }
+// );
 
 export default axiosClient;

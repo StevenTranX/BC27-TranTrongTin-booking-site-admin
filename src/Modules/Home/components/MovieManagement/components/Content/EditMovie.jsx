@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
+
 import moment from 'moment';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { useState } from 'react';
@@ -10,16 +10,16 @@ import { useForm, Controller } from 'react-hook-form';
 import Avatar from '@mui/material/Avatar';
 // SWITCH
 import { styled } from '@mui/material/styles';
-import FormGroup from '@mui/material/FormGroup';
+
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 // redux
-import { useDispatch } from 'react-redux';
-import { addMovies } from '../../../../slices/movieListSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addMovies, getMovieData } from '../../../../slices/movieListSlice';
+import { useParams } from 'react-router-dom';
+import { useMemo } from 'react';
 
 const IOSSwitch = styled((props) => (
   <Switch focusVisibleClassName=".Mui-focusVisible" disableRipple {...props} />
@@ -71,22 +71,45 @@ const IOSSwitch = styled((props) => (
     }),
   },
 }));
-const EditMovie = () => {
-  const [date, setDate] = useState(new Date());
+const EditMovie = (props) => {
+  
   const [imgSrc, setImgSrc] = useState('');
   const dispatch = useDispatch();
-  const { register, control, handleSubmit, setValue } = useForm({
-    defaultValue: {
-      tenPhim: '',
-      trailer: '',
-      moTa: '',
-      ngayKhoiChieu: '',
-      sapChieu: false,
-      dangChieu: false,
-      hot: false,
-      hinhAnh: {},
-    },
+  const params = useParams()
+  console.log(params.movieID)
+  useEffect( () => {
+    dispatch(getMovieData(params.movieID))
+  }, [])
+  const {selectedMovie} = useSelector(state => state.movieList)
+  console.log(selectedMovie);
+
+  // const preloaded = {
+  //   tenPhim: selectedMovie.tenPhim,
+  //   trailer: selectedMovie.trailer,
+  //   moTa: selectedMovie.moTa,
+  //   ngayKhoiChieu: selectedMovie.ngayKhoiChieu,
+  //   sapChieu: selectedMovie.sapChieu,
+  //   dangChieu: selectedMovie.dangChieu,
+  //   hot: selectedMovie.hot,
+  //   hinhAnh: selectedMovie.hinhAnh,
+  // }
+ 
+  const { register, control, handleSubmit, setValue, reset } = useForm({
+    defaultValue : {
+          tenPhim: '',
+    trailer: '',
+    moTa: '',
+    ngayKhoiChieu: '',
+    sapChieu: false,
+    dangChieu: false,
+    hot: false,
+    hinhAnh: []
+    }
+    
   });
+  useEffect(() => {
+    reset(selectedMovie)
+  }, [selectedMovie]);
   const handleChangeDate = (event) => {
     const formattedDate = moment(event).format('DD/MM/YYYY');
     setValue('ngayKhoiChieu', formattedDate);
@@ -131,13 +154,13 @@ const EditMovie = () => {
         />
         <Controller
           name="ngayKhoiChieu"
-          defaultValue={date}
           control={control}
           render={({ field: { onChange, ...restField } }) => (
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DatePicker
                 inputFormat="DD/MM/YYYY"
                 label="Request Date"
+               
                 onChange={(event) => {
                   handleChangeDate(event);
                   onChange(event);

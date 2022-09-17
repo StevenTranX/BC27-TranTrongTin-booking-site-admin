@@ -1,4 +1,4 @@
-import { getValue } from '@mui/system';
+
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import movieAPI from '../../../apis/movieAPI';
 
@@ -6,13 +6,26 @@ const initialState = {
   movies: [],
   isLoading: false,
   error: null,
+  selectedMovie : null,
 };
+export const getMovieData = createAsyncThunk(
+  'MovieManagement/getMovieData' , 
+  async (movieID, {rejectWithValue}) => {
+    try {
+      const {data} = await movieAPI.getMovieData(movieID);
+      console.log(data.content);
+      return data.content
+    } catch (error) {
+      return rejectWithValue(error.response.data.content)
+    }
+  }
+)
 export const getMovies = createAsyncThunk(
   'Home/MovieManagement/Content/getMovies',
   async (_, { rejectWithValue }) => {
     try {
-      const { data } = await movieAPI.getMovies();
-      return data.content;
+      const  {data}  = await movieAPI.getMovies();
+      return data.content
     } catch (error) {
       return rejectWithValue(error.response.data.content);
     }
@@ -54,6 +67,7 @@ const movieListSlice = createSlice({
       state.isLoading = true;
     });
     builder.addCase(getMovies.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.movies = action.payload;
       state.isLoading = false;
     });
@@ -61,6 +75,11 @@ const movieListSlice = createSlice({
       state.error = action.payload;
       state.isLoading = false;
     });
-  },
+    builder.addCase(getMovieData.fulfilled, (state, action) => {
+      state.selectedMovie = action.payload;
+      console.log(state.selectedMovie)
+      state.isLoading = false;
+  });
+}
 });
 export default movieListSlice.reducer;

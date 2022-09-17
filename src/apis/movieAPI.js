@@ -19,5 +19,8 @@ const movieAPI = {
   deleteMovies: (movieID) => {
     return axiosClient.delete(`QuanLyPhim/XoaPhim?MaPhim=${movieID}`);
   },
+  getMovieData : (movieID) => {
+    return axiosClient.get(`QuanLyPhim/LayThongTinPhim?MaPhim=${movieID}`)
+  }
 };
 export default movieAPI;
