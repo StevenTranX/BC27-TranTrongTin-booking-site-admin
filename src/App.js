@@ -17,7 +17,8 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<MovieManagement />}>
+        <Route path = "/" element = {<Login/>}/>
+        <Route path="/admin" element={<MovieManagement />}>
           <Route index element={<Content />} />
           <Route path="admin/addMovie" element={<AddMovie />} />
           <Route path="admin/updateMovie/:movieID" element={<EditMovie />} />

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import {Grid, Paper,} from '@mui/material';
 
 import moment from 'moment';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -17,7 +18,7 @@ import Button from '@mui/material/Button';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 // redux
 import { useDispatch, useSelector } from 'react-redux';
-import { addMovies, getMovieData } from '../../../../slices/movieListSlice';
+import { addMovies, getMovieData, updateMovie } from '../../../../slices/movieListSlice';
 import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 
@@ -76,12 +77,11 @@ const EditMovie = (props) => {
   const [imgSrc, setImgSrc] = useState('');
   const dispatch = useDispatch();
   const params = useParams()
-  console.log(params.movieID)
   useEffect( () => {
     dispatch(getMovieData(params.movieID))
   }, [])
   const {selectedMovie} = useSelector(state => state.movieList)
-  console.log(selectedMovie);
+  // console.log(selectedMovie);
 
   // const preloaded = {
   //   tenPhim: selectedMovie.tenPhim,
@@ -96,20 +96,22 @@ const EditMovie = (props) => {
  
   const { register, control, handleSubmit, setValue, reset } = useForm({
     defaultValue : {
-          tenPhim: '',
+    maPhim : '',
+    tenPhim: '',
     trailer: '',
     moTa: '',
     ngayKhoiChieu: '',
     sapChieu: false,
     dangChieu: false,
     hot: false,
-    hinhAnh: []
+    hinhAnh: null,
     }
     
   });
   useEffect(() => {
     reset(selectedMovie)
   }, [selectedMovie]);
+
   const handleChangeDate = (event) => {
     const formattedDate = moment(event).format('DD/MM/YYYY');
     setValue('ngayKhoiChieu', formattedDate);
@@ -124,43 +126,60 @@ const EditMovie = (props) => {
       setImgSrc(evt.target.result);
     };
   };
+  // const handleChangeSwitch = (name) => {
+  //   return (value) => {
+  //     setValue(name, value)
+  //   }
+  // }
   const onSubmit = (value) => {
-    handleChangeDate(value.ngayKhoiChieu);
-    dispatch(addMovies(value));
+    dispatch(updateMovie(value))
     console.log(value);
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <h1>Add Movie</h1>
-        <TextField
+        <Paper variant = 'outlined'>
+        <h1 style = {{ fontWeight : 500, fontSize : '30px', textAlign : 'center', color : 'darkblue'}}>Add Movie</h1>
+        <Grid  sx = {{margin : 2}}>
+          <Grid item xs = {12} md = {2.5}  spacing = {1} sx = {{ marginBottom : '10px'}} >
+          <TextField
+          color = "secondary"
           id="outlined-basic"
           label="Movie Name"
           variant="outlined"
           {...register('tenPhim')}
         />
+          </Grid>
+          <Grid item xs = {12} md = {2.5}> 
         <TextField
+         color = "secondary"
           id="outlined-basic"
           label="Trailer"
           variant="outlined"
           {...register('trailer')}
-        />
+        /> </Grid>
+        <Grid item xs = {12} md = {2.5}>
         <TextField
+         color = "secondary"
           id="outlined-basic"
           label="Description"
           variant="outlined"
           {...register('moTa')}
         />
+        </Grid>
+        <Grid item xs = {12} md = {2.5} >
         <Controller
+         color = "secondary"
           name="ngayKhoiChieu"
           control={control}
           render={({ field: { onChange, ...restField } }) => (
             <LocalizationProvider dateAdapter={AdapterMoment}>
               <DatePicker
+               color = "secondary"
                 inputFormat="DD/MM/YYYY"
                 label="Request Date"
-               
+                defaultValue = {selectedMovie?.ngayKhoiChieu}
                 onChange={(event) => {
                   handleChangeDate(event);
                   onChange(event);
@@ -171,22 +190,40 @@ const EditMovie = (props) => {
             </LocalizationProvider>
           )}
         />
+        </Grid>
+        <Grid item xs = {6} md = {10}>
         <FormControlLabel
-          control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+         color = "secondary"
+
+          control={<IOSSwitch sx={{ m: 1 }} defaultChecked = {selectedMovie?.dangChieu}  />}
           label="is Showing"
           {...register('dangChieu')}
-        />
-        <FormControlLabel
-          control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+        />       
+   
+        <FormControlLabel color = "secondary"
+          control={<IOSSwitch sx={{ m: 1 }} defaultChecked = {selectedMovie?.sapChieu} />}
           label="about to Show"
           {...register('sapChieu')}
         />
+      
+     
         <FormControlLabel
-          control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+         color = "secondary"
+          control={<IOSSwitch sx={{ m: 1 }} defaultChecked = {selectedMovie?.hot}  />}
           label="Hot"
           {...register('hot')}
         />
-        <Button variant="contained" component="label">
+        </Grid>
+    
+        </Grid >
+
+        <Grid sx = {{ marginTop : 2, mx : 4}}>
+        <Avatar variant = "outlined" alt="Image" src={imgSrc === '' ? selectedMovie?.hinhAnh : imgSrc } sx={{ width: 100, height: 100 }} />
+
+        </Grid>
+  
+        <Grid>
+        <Button sx = {{ my : 5 , mx : 4}} variant="contained" component="label">
           Upload File
           <input
             type="file"
@@ -195,10 +232,13 @@ const EditMovie = (props) => {
             onChange={handleUpload}
           />
         </Button>
-        <Avatar alt="Image" src={imgSrc} sx={{ width: 100, height: 100 }} />
-        <Button type="submit" variant="contained">
-          Submit
+        
+        </Grid>
+     
+        <Button sx = {{ width : '150px', mx : 4, height : '50px',}} color = "success" type="submit" variant="contained">
+          Update
         </Button>
+        </Paper>
       </form>
     </div>
   );

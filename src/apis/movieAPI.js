@@ -21,6 +21,19 @@ const movieAPI = {
   },
   getMovieData : (movieID) => {
     return axiosClient.get(`QuanLyPhim/LayThongTinPhim?MaPhim=${movieID}`)
+  },
+
+  updateMovie : (movie) => {
+    const formData = new FormData();
+    console.log(movie )
+    for (let key in movie) {
+      formData.append(key, movie[key])
+    }
+    formData.append('maNhom', 'GP01');
+    // if(movie.hinhAnh !== null) formData.append('File', movie.hinhAnh, movie.hinhAnh.name)
+    console.log(formData);
+    return axiosClient.post(`QuanLyPhim/CapNhatPhimUpLoad` , formData)
   }
+
 };
 export default movieAPI;

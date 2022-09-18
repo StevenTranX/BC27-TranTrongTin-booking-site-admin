@@ -13,7 +13,7 @@ export const getMovieData = createAsyncThunk(
   async (movieID, {rejectWithValue}) => {
     try {
       const {data} = await movieAPI.getMovieData(movieID);
-      console.log(data.content);
+      // console.log(data.content);
       return data.content
     } catch (error) {
       return rejectWithValue(error.response.data.content)
@@ -36,11 +36,12 @@ export const addMovies = createAsyncThunk(
   async (value, { rejectWithValue, dispatch }) => {
     try {
       await movieAPI.addMovies(value);
-      console.log(value);
+      // console.log(value);
       dispatch(getMovies());
       alert('Add Movie SuccessFully');
     } catch (error) {
       alert('Add Movie Failed');
+      console.log(error)
       return rejectWithValue(error.response?.data.content);
     }
   }
@@ -58,6 +59,19 @@ export const deleteMovies = createAsyncThunk(
     }
   }
 );
+export const updateMovie = createAsyncThunk(
+  'MovieManagement/UpdateMovie', 
+  async (movie, {rejectWithValue, dispatch}) => {
+    try {
+      await movieAPI.updateMovie(movie);
+      dispatch(getMovies)
+      alert ('Update SuccessFully')
+    } catch (error) {
+      alert ('Update Failed ')
+      console.log(error)
+    }
+  }
+)
 const movieListSlice = createSlice({
   name: 'home/movieList',
   initialState,
@@ -77,9 +91,11 @@ const movieListSlice = createSlice({
     });
     builder.addCase(getMovieData.fulfilled, (state, action) => {
       state.selectedMovie = action.payload;
-      console.log(state.selectedMovie)
+      // console.log(state.selectedMovie)
       state.isLoading = false;
   });
+  
+
 }
 });
 export default movieListSlice.reducer;
