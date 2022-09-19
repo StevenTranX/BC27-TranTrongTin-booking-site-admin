@@ -9,7 +9,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 // SWITCH
 import Button from "@mui/material/Button";
 // redux
@@ -24,22 +24,24 @@ const EditUser = (props) => {
   const params = useParams();
 
   const { selectedUser } = useSelector((state) => state.user);
-  console.log(selectedUser);
 
-  const [userType, setUserType] = useState(selectedUser?.maLoaiNguoiDung);
-  const [userNumber, setUserNumber] = useState(selectedUser?.soDT)
-  const { register, control, handleSubmit, reset, setValue } = useForm({
-    
-    defaultValue: {
-      taiKhoan: "",
-      matKhau: "",
-      email: "",
-    //   soDt: "",
-      maLoaiNguoiDung: "",
-      hoTen: "",
-      maNhom: "GP01",
-    },
+  const preloaded = {
+    taiKhoan: "",
+    matKhau: "",
+    email: "",
+    soDt: "",
+    maLoaiNguoiDung: "",
+    hoTen: "",
+    maNhom: "GP01",
+  };
+  const [userType, setUserType] = useState(
+    selectedUser?.maLoaiNguoiDung || null
+  );
+  const [userNumber, setUserNumber] = useState(selectedUser?.soDT);
+  const { register, handleSubmit, reset, setValue } = useForm({
+    defaultValue: preloaded,
   });
+
   useEffect(() => {
     dispatch(getUserData(params.userID));
   }, []);
@@ -49,33 +51,39 @@ const EditUser = (props) => {
   }, [selectedUser?.maLoaiNguoiDung]);
 
   useEffect(() => {
-    reset(selectedUser);
+    reset({
+      taiKhoan: selectedUser?.taiKhoan,
+      matKhau: selectedUser?.matKhau,
+      email: selectedUser?.email,
+      soDt: selectedUser?.soDT,
+      maLoaiNguoiDung: selectedUser?.maLoaiNguoiDung,
+      hoTen: selectedUser?.hoTen,
+      maNhom: "GP01",
+    });
   }, [selectedUser]);
-  
-  useEffect(() => {
-    setUserNumber(selectedUser?.soDT);
-  }, [selectedUser?.soDT]);
+
+  //   useEffect(() => {
+  //     setUserNumber(selectedUser?.soDT);
+  //   }, [selectedUser?.soDT]);
 
   const handleSelect = (evt) => {
     setUserType(evt.target.value);
     setValue("maLoaiNguoiDung", evt.target.value);
   };
-  const onSubmit = async (value) => {
-    console.log(value)
+  const onSubmit = (value) => {
+    console.log("form", value);
     try {
-      await dispatch(updateUser(value)).unwrap();
+      dispatch(updateUser(value));
       // navigate('/admin/user')
-      
     } catch (error) {
       console.log(error);
     }
-    
   };
 
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Paper variant='outlined'>
+        <Paper sx={{ overflow: "hidden" }} variant='outlined'>
           <h1
             style={{
               fontWeight: 500,
@@ -96,16 +104,19 @@ const EditUser = (props) => {
                 label='Username'
                 variant='outlined'
                 {...register("taiKhoan")}
+                defaultValue = {selectedUser?.taiKhoan}
               />
             </Grid>
             <Grid item xs={12} md={2.5}>
               <TextField
+                value = {selectedUser?.matKhau || ''}
                 type='password'
                 color='secondary'
                 id='outlined-basic'
                 label='Password'
                 variant='outlined'
                 {...register("matKhau")}
+                
               />{" "}
             </Grid>
             <Grid item xs={12} md={2.5}>
@@ -116,31 +127,31 @@ const EditUser = (props) => {
                 label='Email'
                 variant='outlined'
                 {...register("email")}
+                defaultValue = {selectedUser?.email}
               />{" "}
             </Grid>
-            <Grid item xs={12} md={2.5}>
+            <Grid sx={{ overflow: "hidden" }} item xs={12} md={2.5}>
               <TextField
-                
                 type='number'
                 color='secondary'
-                id='outlined-basic'
                 label='Phone Number'
                 variant='outlined'
                 value={userNumber}
                 {...register("soDt")}
               />
             </Grid>
-            <Grid>
+            <Grid   sx={{ minWidth: 120, marginTop: "18px", marginLeft: "16px" }}>
               <Box
-                sx={{ minWidth: 120, marginTop: "24px", marginLeft: "16px" }}
+              
               >
                 <FormControl sx={{ width: "200px" }}>
                   <InputLabel id='demo-simple-select-label'>
                     User Type
                   </InputLabel>
                   <Select
+                    name='maLoaiNguoiDung'
                     label='User Type'
-                    value={userType}
+                    value={userType || ""}
                     {...register("maLoaiNguoiDung")}
                     onChange={handleSelect}
                   >
@@ -152,12 +163,13 @@ const EditUser = (props) => {
             </Grid>
             <Grid item xs={10} md={2.5}>
               <TextField
-                sx={{ marginLeft: "30px", marginTop: "8px" }}
+                sx={{  marginTop: "8px" }}
                 color='secondary'
                 id='outlined-basic'
                 label='Full Name'
                 variant='outlined'
                 {...register("hoTen")}
+                defaultValue = {selectedUser?.hoTen}
               />
             </Grid>
           </Grid>
@@ -168,6 +180,7 @@ const EditUser = (props) => {
               height: "50px",
               marginTop: "20px",
               marginRight: "50px",
+              marginBottom : "30px"
             }}
             color='success'
             type='submit'

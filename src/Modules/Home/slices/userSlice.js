@@ -46,16 +46,29 @@ export const getUserData = createAsyncThunk(
   }
 );
 export const updateUser = createAsyncThunk(
-  'MovieManagement/UpdateMovie',
-  async (_, { rejectWithValue, dispatch }) => {
+  'UserManagement/UpdateUser',
+  async (user, { rejectWithValue, dispatch }) => {
     try {
-      await userAPI.updateUser();
+      await userAPI.updateUser(user);
       dispatch(getUsers());
       alert('Update SuccessFully');
     } catch (error) {
       alert('Update Failed');
       rejectWithValue(error.response.data)
       console.log(error.response.data);
+    }
+  }
+);
+export const deleteUser = createAsyncThunk(
+  'UserManagement/DeleteUser',
+  async (value, { rejectWithValue, dispatch }) => {
+    try {
+      await userAPI.deleteUser(value);
+      alert('Delete User SuccessFully');
+      dispatch(getUsers());
+    } catch (error) {
+      alert(error.response.data.content);
+      return rejectWithValue(error.response?.data.content);
     }
   }
 );
@@ -69,7 +82,7 @@ const userSlice = createSlice({
       state.isLoading = false;
     });
     builder.addCase(getUserData.fulfilled, (state, action) => {
-      console.log(action.payload);
+      console.log('payload' , action.payload);
       state.selectedUser = action.payload;
     });
 

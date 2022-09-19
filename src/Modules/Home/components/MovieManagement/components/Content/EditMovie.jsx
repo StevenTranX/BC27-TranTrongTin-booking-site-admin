@@ -133,7 +133,7 @@ const EditMovie = (props) => {
   //   }
   // }
   const onSubmit = async (value) => {
-    await dispatch(updateMovie(value));
+    await dispatch(updateMovie(value)).unwrap();
     navigate('/admin');
     console.log(value);
   };

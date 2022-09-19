@@ -14,8 +14,11 @@ const userAPI = {
   getUserData : (username) => {
     return axiosClient.post(`QuanLyNguoiDung/LayThongTinNguoiDung?taiKhoan=${username}`)
   },
-  updateUser : () => {
-    return axiosClient.post(`QuanLyNguoiDung/CapNhatThongTinNguoiDung`)
+  updateUser : (user) => {
+    return axiosClient.post(`QuanLyNguoiDung/CapNhatThongTinNguoiDung` , user)
+  },
+  deleteUser : (username) => {
+    return axiosClient.delete(`QuanLyNguoiDung/XoaNguoiDung?TaiKhoan=${username}`)
   }
 };
 export default userAPI;

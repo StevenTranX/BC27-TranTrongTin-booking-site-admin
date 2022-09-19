@@ -60,16 +60,16 @@ export default function Login() {
   //   });
   // };
   const onSubmit = async (values) => {
-    try {
-    await dispatch(login(values)).unwrap()
-      navigate('/admin')
-      alert('success')
-    } catch (error) {
-      alert(error)
-    }
-    if (user) {
-      return navigate('/admin')
-    }
+
+      try {
+        await dispatch(login(values)).unwrap()
+        navigate('/admin')
+        alert('Login Successfully')
+        } catch (error) {
+          alert('Login Failed')
+          console.log(error)
+        }
+    
   }
   return (
     <div>

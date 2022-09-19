@@ -8,12 +8,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDispatch } from 'react-redux';
-import { deleteMovies } from '../../../../slices/movieListSlice';
+import { deleteUser } from '../../../../slices/userSlice';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function AlertDialogSlide({ movieData }) {
+export default function UserConfirmPopUp({ userData }) {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const handleClickOpen = () => {
@@ -24,14 +24,15 @@ export default function AlertDialogSlide({ movieData }) {
     setOpen(false);
   };
   const handleDelete = async () => {
-    await dispatch(deleteMovies(movieData.maPhim));
+    console.log(userData.taiKhoan)
+    await dispatch(deleteUser(userData.taiKhoan)).unwrap();
     handleClose();
   };
 
   return (
     <div>
       <Button onClick={handleClickOpen}>
-        <DeleteIcon sx={{ color: 'red' }} />
+        <DeleteIcon sx={{ color: 'red', fontSize : '30px' }} />
       </Button>
       <Dialog
         open={open}
@@ -44,10 +45,10 @@ export default function AlertDialogSlide({ movieData }) {
         <DialogContent>
           <DialogContentText id="alert-dialog-slide-description">
             <p>
-              Are you sure to delete movie
-              <span style={{ fontWeight: 'bold' }}> {movieData.tenPhim} </span>
-              with ID
-              <span style={{ fontWeight: 'bold' }}> {movieData.maPhim} </span> ?
+              Are you sure to delete user
+              <span style={{ fontWeight: 'bold' }}> {userData.hoTen} </span>
+              with username
+              <span style={{ fontWeight: 'bold' }}> {userData.taiKhoan} </span> ?
             </p>
           </DialogContentText>
         </DialogContent>

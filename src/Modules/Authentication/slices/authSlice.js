@@ -10,7 +10,14 @@ export const login = createAsyncThunk(
   async (value, { rejectWithValue }) => {
     try {
       const data = await authAPI.login(value);
-      localStorage.setItem('user', JSON.stringify(data));
+     
+      if (data.data.content.maLoaiNguoiDung === 'QuanTri') {
+        localStorage.setItem('user', JSON.stringify(data));
+        alert ('Login successfully')
+        
+      } else {
+        alert('Please login by administrator account')
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error);
@@ -34,6 +41,10 @@ const authSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.user = action.payload;
     });
+    builder.addCase(login.rejected, (state, action) => {
+      alert('Please login by administrator account')
+    });
+    
   },
 });
 export default authSlice.reducer;

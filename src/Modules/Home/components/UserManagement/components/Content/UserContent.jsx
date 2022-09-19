@@ -11,7 +11,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import UserConfirmPopUp from '../UserConfirmPopUp/UserConfirmPopUp';
 // Table
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -29,6 +29,7 @@ import { getUsers } from '../../../../slices/userSlice';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 // Main
+import { useState } from 'react';
 // Global Variable
 
 const columns = [
@@ -68,6 +69,7 @@ const columns = [
 ];
 
 export default function Content() {
+  const [isOpen, setIsOpen] = useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const dispatch = useDispatch();
@@ -75,7 +77,9 @@ export default function Content() {
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
+  const handleClose = () => {
+    setIsOpen(false);
+  };
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -171,13 +175,14 @@ export default function Content() {
                         <Link to={`updateUser/${user.taiKhoan}`}>
                           <EditIcon
                             className="mr-2 cursor-pointer"
-                            sx={{ color: 'blue' }}
+                            sx={{ color: 'blue', fontSize : '30px' }}
                           />
                         </Link>
-                        <DeleteIcon
-                          className="ml-2 cursor-pointer"
-                          sx={{ color: 'red' }}
-                        />
+                        <UserConfirmPopUp
+                                userData={user}
+                                isOpen={false}
+                                onClose={handleClose}
+                              />
                       </TableCell>
                     </TableRow>
                   );
