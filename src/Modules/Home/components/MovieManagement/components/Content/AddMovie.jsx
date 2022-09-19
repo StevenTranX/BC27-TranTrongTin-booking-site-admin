@@ -164,7 +164,7 @@ const AddMovie = () => {
                       sx={{ width: '100px' }}
                       color="secondary"
                       inputFormat="DD/MM/YYYY"
-                      label="Request Date"
+                      label="Day Showing"
                       onChange={(event) => {
                         handleChangeDate(event);
                         onChange(event);

@@ -10,7 +10,7 @@ import Login from './Modules/Authentication/Components/Login/Login';
 import Register from './Modules/Authentication/Components/Register/Register';
 import AddUser from './Modules/Home/components/UserManagement/components/Content/AddUser';
 import EditUser from './Modules/Home/components/UserManagement/components/Content/EditUser';
-import UserContent from './Modules/Home/components/UserManagement/components/Content/UserContent'
+import UserContent from './Modules/Home/components/UserManagement/components/Content/UserContent';
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -20,11 +20,11 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path = "/" element = {<Login/>}/>
+        <Route path="/" element={<Login />} />
         <Route path="/admin" element={<MovieManagement />}>
           <Route index element={<Content />} />
-          <Route path="admin/addMovie" element={<AddMovie />} />
-          <Route path="admin/updateMovie/:movieID" element={<EditMovie />} />
+          <Route path="/admin/addMovie" element={<AddMovie />} />
+          <Route path="/admin/updateMovie/:movieID" element={<EditMovie />} />
         </Route>
         <Route path="/admin/user" element={<UserManagement />}>
           <Route index element={<UserContent />} />

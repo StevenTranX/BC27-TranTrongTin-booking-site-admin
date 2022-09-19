@@ -7,20 +7,9 @@ const userAPI = {
       },
     });
   },
-//   addUser: (movie) => {
-//     const formData = new FormData();
-//     for (let key in movie) {
-//       formData.append(key, movie[key]);
-//     }
-//     formData.append('maNhom', 'GP01');
-//     console.log(formData);
-//     return axiosClient.post('QuanLyPhim/ThemPhimUploadHinh', formData);
-//   },
-//   deleteMovies: (movieID) => {
-//     return axiosClient.delete(`QuanLyPhim/XoaPhim?MaPhim=${movieID}`);
-//   },
-//   getMovieData : (movieID) => {
-//     return axiosClient.get(`QuanLyPhim/LayThongTinPhim?MaPhim=${movieID}`)
-//   }
+  addUser: (user) => {
+    console.log(user);
+    return axiosClient.post('QuanLyNguoiDung/ThemNguoiDung', user);
+  },
 };
 export default userAPI;
