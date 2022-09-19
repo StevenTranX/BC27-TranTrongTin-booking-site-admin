@@ -5,9 +5,12 @@ import MovieManagement from './Modules/Home/components/MovieManagement';
 import Content from './Modules/Home/components/MovieManagement/components/Content';
 import EditMovie from './Modules/Home/components/MovieManagement/components/Content/EditMovie';
 import AddMovie from './Modules/Home/components/MovieManagement/components/Content/AddMovie';
-
+import UserManagement from './Modules/Home/components/UserManagement/UserManagement';
 import Login from './Modules/Authentication/Components/Login/Login';
 import Register from './Modules/Authentication/Components/Register/Register';
+import AddUser from './Modules/Home/components/UserManagement/components/Content/AddUser';
+import EditUser from './Modules/Home/components/UserManagement/components/Content/EditUser';
+import UserContent from './Modules/Home/components/UserManagement/components/Content/UserContent'
 
 function App() {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -22,7 +25,11 @@ function App() {
           <Route path="admin/addMovie" element={<AddMovie />} />
           <Route path="admin/updateMovie/:movieID" element={<EditMovie />} />
         </Route>
-
+        <Route path="/admin/user" element={<UserManagement />}>
+          <Route index element={<UserContent />} />
+          <Route path="admin/addUser" element={<AddUser />} />
+          <Route path="admin/updateUser/:userID" element={<EditUser />} />
+        </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
