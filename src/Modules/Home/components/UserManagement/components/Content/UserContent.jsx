@@ -35,27 +35,28 @@ const columns = [
   { id: 'name', label: 'Username', minWidth: 120 },
   { id: 'code', label: 'Name', minWidth: 170 },
   {
-    id: 'password',
-    label: 'Password',
-    minWidth: 200,
-    align: 'center',
-  },
-  {
     id: 'email',
     label: 'Email',
-    minWidth: 300,
-    align: 'center',
+    minWidth: 180,
+    align: 'left',
   },
+  {
+    id: 'password',
+    label: 'Password',
+    minWidth: 150,
+    align: 'left',
+  },
+
   {
     id: 'phoneNumber',
     label: 'Phone Number',
-    minWidth: 300,
-    align: 'center',
+    minWidth: 100,
+    align: 'left',
   },
   {
     id: 'userType',
     label: 'User Type',
-    minWidth: 300,
+    minWidth: 100,
     align: 'center',
   },
   {
@@ -87,7 +88,7 @@ export default function Content() {
   }, []);
 
   return (
-    <Paper sx={{ maxWidth: 1170, margin: 'auto', overflow: 'hidden' }}>
+    <Paper sx={{ maxWidth: 1300, margin: 'auto', overflow: 'hidden' }}>
       <AppBar
         position="static"
         color="default"
@@ -130,7 +131,7 @@ export default function Content() {
         </Toolbar>
       </AppBar>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
@@ -162,12 +163,12 @@ export default function Content() {
                       <TableCell sx={{ fontWeight: 'bold' }}>
                         {user.hoTen}
                       </TableCell>
-                      <TableCell align="center">{user.email}</TableCell>
-                      <TableCell align="left">{user.soDt}</TableCell>
+                      <TableCell align="left">{user.email}</TableCell>
                       <TableCell align="left">{user.matKhau}</TableCell>
-                      <TableCell align="left">{user.maLoaiNguoiDung}</TableCell>
+                      <TableCell align="left">{user.soDT}</TableCell>
+                      <TableCell align="center">{user.maLoaiNguoiDung}</TableCell>
                       <TableCell align="center">
-                        <Link to={`admin/updateUser/${user.taiKhoan}`}>
+                        <Link to={`updateUser/${user.taiKhoan}`}>
                           <EditIcon
                             className="mr-2 cursor-pointer"
                             sx={{ color: 'blue' }}

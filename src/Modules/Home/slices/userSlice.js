@@ -32,16 +32,48 @@ export const addUser = createAsyncThunk(
     }
   }
 );
+export const getUserData = createAsyncThunk(
+  'UserManagement/getUserData',
+  async (username, { rejectWithValue }) => {
+    try {
+      const { data } = await userAPI.getUserData(username);
+      // alert(`Get UserData : ${username} successfully`)
+      return data.content;
+    } catch (error) {
+      console.log(error)
+      return rejectWithValue(error.response.data.content);
+    }
+  }
+);
+export const updateUser = createAsyncThunk(
+  'MovieManagement/UpdateMovie',
+  async (_, { rejectWithValue, dispatch }) => {
+    try {
+      await userAPI.updateUser();
+      dispatch(getUsers());
+      alert('Update SuccessFully');
+    } catch (error) {
+      alert('Update Failed');
+      rejectWithValue(error.response.data)
+      console.log(error.response.data);
+    }
+  }
+);
 const userSlice = createSlice({
   name: 'UserManagement/user',
   initialState,
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getUsers.fulfilled, (state, action) => {
-      console.log(action.payload);
       state.users = action.payload;
       state.isLoading = false;
     });
+    builder.addCase(getUserData.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.selectedUser = action.payload;
+    });
+
   },
 });
+
 export default userSlice.reducer;

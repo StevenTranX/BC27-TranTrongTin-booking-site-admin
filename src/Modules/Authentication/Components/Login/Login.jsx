@@ -61,14 +61,14 @@ export default function Login() {
   // };
   const onSubmit = async (values) => {
     try {
-      await dispatch(login(values)).unwrap()
+    await dispatch(login(values)).unwrap()
+      navigate('/admin')
       alert('success')
-      navigate('/')
     } catch (error) {
       alert(error)
     }
     if (user) {
-      return navigate('/')
+      return navigate('/admin')
     }
   }
   return (

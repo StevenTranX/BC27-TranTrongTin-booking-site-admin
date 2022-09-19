@@ -182,7 +182,7 @@ export default function Content() {
                         <TableCell align="center">
                           <Grid container sx={{ marginLeft: '10px' }}>
                             <Grid item xs={4} sx={{ marginTop: '5px' }}>
-                              <Link to={`admin/updateMovie/${movie.maPhim}`}>
+                              <Link to={`updateMovie/${movie.maPhim}`}>
                                 <EditIcon
                                   // className="mr-2"
                                   sx={{ color: 'blue' }}
