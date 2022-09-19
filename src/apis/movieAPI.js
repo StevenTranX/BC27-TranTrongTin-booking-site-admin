@@ -19,20 +19,18 @@ const movieAPI = {
   deleteMovies: (movieID) => {
     return axiosClient.delete(`QuanLyPhim/XoaPhim?MaPhim=${movieID}`);
   },
-  getMovieData : (movieID) => {
-    return axiosClient.get(`QuanLyPhim/LayThongTinPhim?MaPhim=${movieID}`)
+  getMovieData: (movieID) => {
+    return axiosClient.get(`QuanLyPhim/LayThongTinPhim?MaPhim=${movieID}`);
   },
-  updateMovie : (movie) => {
+  updateMovie: (movie) => {
     const formData = new FormData();
-    console.log(movie )
+    console.log(movie);
     for (let key in movie) {
-      formData.append(key, movie[key])
+      formData.append(key, movie[key]);
     }
-    formData.append('maNhom', 'GP01');
-    // if(movie.hinhAnh !== null) formData.append('File', movie.hinhAnh, movie.hinhAnh.name)
+    if (movie.hinhAnh !== null) formData.append('File', movie.hinhAnh);
     console.log(formData);
-    return axiosClient.post(`QuanLyPhim/CapNhatPhimUpLoad` , formData)
-  }
-
+    return axiosClient.post(`QuanLyPhim/CapNhatPhimUpLoad`, formData);
+  },
 };
 export default movieAPI;

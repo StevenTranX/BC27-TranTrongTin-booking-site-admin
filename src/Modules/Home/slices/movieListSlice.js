@@ -1,31 +1,30 @@
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import movieAPI from '../../../apis/movieAPI';
-
+import { Navigate } from 'react-router-dom';
 const initialState = {
   movies: [],
   isLoading: false,
   error: null,
-  selectedMovie : null,
+  selectedMovie: null,
 };
 export const getMovieData = createAsyncThunk(
-  'MovieManagement/getMovieData' , 
-  async (movieID, {rejectWithValue}) => {
+  'MovieManagement/getMovieData',
+  async (movieID, { rejectWithValue }) => {
     try {
-      const {data} = await movieAPI.getMovieData(movieID);
+      const { data } = await movieAPI.getMovieData(movieID);
       // console.log(data.content);
-      return data.content
+      return data.content;
     } catch (error) {
-      return rejectWithValue(error.response.data.content)
+      return rejectWithValue(error.response.data.content);
     }
   }
-)
+);
 export const getMovies = createAsyncThunk(
   'Home/MovieManagement/Content/getMovies',
   async (_, { rejectWithValue }) => {
     try {
-      const  {data}  = await movieAPI.getMovies();
-      return data.content
+      const { data } = await movieAPI.getMovies();
+      return data.content;
     } catch (error) {
       return rejectWithValue(error.response.data.content);
     }
@@ -41,7 +40,7 @@ export const addMovies = createAsyncThunk(
       alert('Add Movie SuccessFully');
     } catch (error) {
       alert('Add Movie Failed');
-      console.log(error)
+      console.log(error);
       return rejectWithValue(error.response?.data.content);
     }
   }
@@ -60,18 +59,18 @@ export const deleteMovies = createAsyncThunk(
   }
 );
 export const updateMovie = createAsyncThunk(
-  'MovieManagement/UpdateMovie', 
-  async (movie, {rejectWithValue, dispatch}) => {
+  'MovieManagement/UpdateMovie',
+  async (movie, { rejectWithValue, dispatch }) => {
     try {
       await movieAPI.updateMovie(movie);
-      dispatch(getMovies)
-      alert ('Update SuccessFully')
+      dispatch(getMovies);
+      alert('Update SuccessFully');
     } catch (error) {
-      alert ('Update Failed ')
-      console.log(error)
+      alert('Update Failed ');
+      console.log(error.response.data);
     }
   }
-)
+);
 const movieListSlice = createSlice({
   name: 'home/movieList',
   initialState,
@@ -93,9 +92,7 @@ const movieListSlice = createSlice({
       state.selectedMovie = action.payload;
       // console.log(state.selectedMovie)
       state.isLoading = false;
-  });
-  
-
-}
+    });
+  },
 });
 export default movieListSlice.reducer;
