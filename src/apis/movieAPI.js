@@ -33,5 +33,6 @@ const movieAPI = {
     console.log(formData);
     return axiosClient.post(`QuanLyPhim/CapNhatPhimUpLoad` , formData)
   }
+
 };
 export default movieAPI;
