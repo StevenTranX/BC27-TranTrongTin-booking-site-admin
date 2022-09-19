@@ -1,11 +1,10 @@
-import React, {useEffect} from 'react';
-
+import React, { useEffect } from 'react';
 
 import { TextField } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import moment from 'moment';
-import {Avatar , Grid, Paper }from '@mui/material';
+import { Avatar, Grid, Paper } from '@mui/material';
 
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
@@ -88,7 +87,7 @@ const AddMovie = () => {
   const handleChangeDate = (event) => {
     const formattedDate = moment(event).format('DD/MM/YYYY');
     setValue('ngayKhoiChieu', formattedDate);
-    return formattedDate
+    return formattedDate;
   };
 
   const handleUpload = (event) => {
@@ -102,116 +101,138 @@ const AddMovie = () => {
     };
   };
   const onSubmit = (value) => {
-    dispatch(addMovies({...value, ngayKhoiChieu : handleChangeDate(value.ngayKhoiChieu)}));
+    dispatch(
+      addMovies({
+        ...value,
+        ngayKhoiChieu: handleChangeDate(value.ngayKhoiChieu),
+      })
+    );
     console.log(value);
   };
 
   return (
     <div>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Paper container  elevation = {4} variant = 'outlined'>
-      <h1 style = {{ fontWeight : 500, fontSize : '30px', textAlign : 'center', color : 'darkblue'}}>Add Movie</h1>
-      <Grid container spacing = {3} sx = {{margin : 2}}>
-        <Grid item xs = {12} md = {2.5} sx = {{ marginBottom : '10px'}} >
-        <TextField
-        xs = {{ width : '200px'}}
-        color = "secondary"
-        id="outlined-basic"
-        label="Movie Name"
-        variant="outlined"
-        {...register('tenPhim')}
-      />
-        </Grid>
-        <Grid item xs = {12} md = {2.5}> 
-      <TextField
-       color = "secondary"
-        id="outlined-basic"
-        label="Trailer"
-        variant="outlined"
-        {...register('trailer')}
-      /> </Grid>
-      <Grid item xs = {12} md = {2.5}>
-      <TextField
-       color = "secondary"
-        id="outlined-basic"
-        label="Description"
-        variant="outlined"
-        {...register('moTa')}
-      />
-      </Grid>
-      <Grid item xs = {12} md = {2.5}   >
-      <Controller
-   
-       color = "secondary"
-        name="ngayKhoiChieu"
-        control={control}
-        render={({ field: { onChange, ...restField } }) => (
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <DatePicker
-               sx = {{width : '100px'}}
-             color = "secondary"
-              inputFormat="DD/MM/YYYY"
-              label="Request Date"
-              onChange={(event) => {
-                handleChangeDate(event);
-                onChange(event);
-              }}
-              renderInput={(params) => <TextField {...params} />}
-              {...restField}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Paper container elevation={4} variant="outlined">
+          <h1
+            style={{
+              fontWeight: 500,
+              fontSize: '30px',
+              textAlign: 'center',
+              color: 'darkblue',
+            }}
+          >
+            Add Movie
+          </h1>
+          <Grid container spacing={3} sx={{ margin: 2 }}>
+            <Grid item xs={12} md={2.5} sx={{ marginBottom: '10px' }}>
+              <TextField
+                xs={{ width: '200px' }}
+                color="secondary"
+                id="outlined-basic"
+                label="Movie Name"
+                variant="outlined"
+                {...register('tenPhim')}
+              />
+            </Grid>
+            <Grid item xs={12} md={2.5}>
+              <TextField
+                color="secondary"
+                id="outlined-basic"
+                label="Trailer"
+                variant="outlined"
+                {...register('trailer')}
+              />{' '}
+            </Grid>
+            <Grid item xs={12} md={2.5}>
+              <TextField
+                color="secondary"
+                id="outlined-basic"
+                label="Description"
+                variant="outlined"
+                {...register('moTa')}
+              />
+            </Grid>
+            <Grid item xs={12} md={2.5}>
+              <Controller
+                color="secondary"
+                name="ngayKhoiChieu"
+                control={control}
+                render={({ field: { onChange, ...restField } }) => (
+                  <LocalizationProvider dateAdapter={AdapterMoment}>
+                    <DatePicker
+                      sx={{ width: '100px' }}
+                      color="secondary"
+                      inputFormat="DD/MM/YYYY"
+                      label="Request Date"
+                      onChange={(event) => {
+                        handleChangeDate(event);
+                        onChange(event);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                      {...restField}
+                    />
+                  </LocalizationProvider>
+                )}
+              />
+            </Grid>
+            <Grid item xs={6} md={10}>
+              <FormControlLabel
+                color="secondary"
+                control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+                label="is Showing"
+                {...register('dangChieu')}
+              />
+
+              <FormControlLabel
+                color="secondary"
+                control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+                label="about to Show"
+                {...register('sapChieu')}
+              />
+
+              <FormControlLabel
+                color="secondary"
+                control={<IOSSwitch sx={{ m: 1 }} defaultChecked />}
+                label="Hot"
+                {...register('hot')}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid sx={{ marginTop: 2, mx: 4 }}>
+            <Avatar
+              variant="outlined"
+              alt="Image"
+              src={imgSrc}
+              sx={{ width: 100, height: 100 }}
             />
-          </LocalizationProvider>
-        )}
-      />
-      </Grid>
-      <Grid item xs = {6} md = {10}>
-      <FormControlLabel
-       color = "secondary"
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked   />}
-        label="is Showing"
-        {...register('dangChieu')}
-      />       
- 
-      <FormControlLabel color = "secondary"
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked  />}
-        label="about to Show"
-        {...register('sapChieu')}
-      />
-    
-   
-      <FormControlLabel
-       color = "secondary"
-        control={<IOSSwitch sx={{ m: 1 }} defaultChecked   />}
-        label="Hot"
-        {...register('hot')}
-      />
-      </Grid>
-  
-      </Grid >
+          </Grid>
 
-      <Grid sx = {{ marginTop : 2, mx : 4}}>
-      <Avatar variant = "outlined" alt="Image" src={imgSrc } sx={{ width: 100, height: 100 }} />
+          <Grid>
+            <Button sx={{ my: 5, mx: 4 }} variant="contained" component="label">
+              Upload File
+              <input
+                type="file"
+                hidden
+                {...register('hinhAnh')}
+                onChange={handleUpload}
+              />
+            </Button>
+          </Grid>
 
-      </Grid>
-
-      <Grid>
-      <Button sx = {{ my : 5 , mx : 4}} variant="contained" component="label">
-        Upload File
-        <input
-          type="file"
-          hidden
-          {...register('hinhAnh')}
-          onChange={handleUpload}
-        />
-      </Button>
-      
-      </Grid>
-   
-      <Button sx = {{ width : '150px', mx : 4, height : '50px',}} elevation = {12} color = "success" type="submit" variant="contained">
-        Update
-      </Button>
-      </Paper>
-    </form>
-  </div>
+          <Button
+            sx={{ width: '150px', mx: 4, height: '50px' }}
+            elevation={12}
+            color="success"
+            type="submit"
+            variant="contained"
+          >
+            Add Movie
+          </Button>
+        </Paper>
+      </form>
+    </div>
   );
 };
 

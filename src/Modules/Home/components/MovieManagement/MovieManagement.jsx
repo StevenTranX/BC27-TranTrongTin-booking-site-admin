@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 import { Outlet } from 'react-router-dom';
+import ConfirmPopUp from './components/ConfirmPopUp/ConfirmPopUp';
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
