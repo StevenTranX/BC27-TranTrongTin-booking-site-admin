@@ -28,8 +28,8 @@ function App() {
         </Route>
         <Route path="/admin/user" element={<UserManagement />}>
           <Route index element={<UserContent />} />
-          <Route path="addUser" element={<AddUser />} />
-          <Route path="updateUser/:userID" element={<EditUser />} />
+          <Route path="/admin/user/addUser" element={<AddUser />} />
+          <Route path="/admin/user/updateUser/:userID" element={<EditUser />} />
         </Route>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

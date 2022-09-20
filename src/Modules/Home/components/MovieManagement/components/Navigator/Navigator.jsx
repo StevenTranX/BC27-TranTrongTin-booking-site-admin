@@ -20,9 +20,10 @@ import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from 'react-router-dom';
 const categories = [
   {
-    id: 'Build',
+    id: 'Categories',
     children: [
       {
         id: 'Movie List',
@@ -30,7 +31,7 @@ const categories = [
         active: true,
       },
       { id: 'Add Movie', icon: <AddToPhotosIcon /> },
-      { id: 'Edit Movie', icon: <EditIcon /> },
+      { id: 'User Page', icon: <EditIcon /> },
     ],
   },
   // {
@@ -60,7 +61,17 @@ const itemCategory = {
 
 export default function Navigator(props) {
   const { ...other } = props;
-
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    console.log(id);
+    if (id === 'Add Movie') {
+      navigate('addMovie');
+    } else if (id === 'Movie List') {
+      navigate('/admin');
+    } else if (id === 'User Page') {
+      navigate('/admin/user');
+    }
+  };
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
@@ -89,7 +100,11 @@ export default function Navigator(props) {
             </ListItem>
             {children.map(({ id: childId, icon, active }) => (
               <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
+                <ListItemButton
+                  onClick={() => handleClick(childId)}
+                  selected={active}
+                  sx={item}
+                >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>

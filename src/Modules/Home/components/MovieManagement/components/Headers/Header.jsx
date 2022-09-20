@@ -38,7 +38,7 @@ function Header(props) {
             <Grid item xs />
             <Grid item>
               <Link
-                href="/"
+                href="/movie"
                 variant="body2"
                 sx={{
                   textDecoration: 'none',
@@ -50,7 +50,7 @@ function Header(props) {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Go to docs
+                Go to Movie Page
               </Link>
             </Grid>
             <Grid item>
@@ -109,10 +109,7 @@ function Header(props) {
         sx={{ zIndex: 0 }}
       >
         <Tabs value={0} textColor="inherit">
-          <Tab label="Users" />
-          <Tab label="Sign-in method" />
-          <Tab label="Templates" />
-          <Tab label="Usage" />
+          <Tab label="Movies" />
         </Tabs>
       </AppBar>
     </React.Fragment>

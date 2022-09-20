@@ -116,15 +116,11 @@ export default function Content() {
                 />
               </Grid>
               <Grid item>
-                <Button
-                  onClick={() => {
-                    navigate('admin/addMovie');
-                  }}
-                  variant="contained"
-                  sx={{ mr: 1 }}
-                >
-                  Add Movie
-                </Button>
+                <Link to="addMovie">
+                  <Button variant="contained" sx={{ mr: 1 }}>
+                    Add Movie
+                  </Button>
+                </Link>
                 <Tooltip title="Reload">
                   <IconButton>
                     <RefreshIcon color="inherit" sx={{ display: 'block' }} />

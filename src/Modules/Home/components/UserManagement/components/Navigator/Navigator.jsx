@@ -20,6 +20,7 @@ import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import AddToPhotosIcon from '@mui/icons-material/AddToPhotos';
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from 'react-router-dom';
 const categories = [
   {
     id: 'Build',
@@ -29,18 +30,10 @@ const categories = [
         icon: <TheatersIcon />,
         active: true,
       },
-      { id: 'Add User', icon: <AddToPhotosIcon /> },
-      { id: 'Edit User', icon: <EditIcon /> },
+      { id: 'Add User', icon: <AddToPhotosIcon />, active: true },
+      { id: 'Back to Movie', icon: <EditIcon /> },
     ],
   },
-  // {
-  //   id: 'Quality',
-  //   children: [
-  //     { id: 'Analytics', icon: <SettingsIcon /> },
-  //     { id: 'Performance', icon: <TimerIcon /> },
-  //     { id: 'Test Lab', icon: <PhonelinkSetupIcon /> },
-  //   ],
-  // },
 ];
 
 const item = {
@@ -60,7 +53,19 @@ const itemCategory = {
 
 export default function Navigator(props) {
   const { ...other } = props;
-
+  const navigate = useNavigate();
+  const handleClick = (id) => {
+    if (id === 'Add User') {
+      navigate('addUser');
+    }
+    if (id === 'Back To Movie') {
+      console.log('clicked');
+      navigate(-1);
+    }
+    if (id === 'User List') {
+      navigate('/admin/user');
+    }
+  };
   return (
     <Drawer variant="permanent" {...other}>
       <List disablePadding>
@@ -89,7 +94,11 @@ export default function Navigator(props) {
             </ListItem>
             {children.map(({ id: childId, icon, active }) => (
               <ListItem disablePadding key={childId}>
-                <ListItemButton selected={active} sx={item}>
+                <ListItemButton
+                  selected={active}
+                  sx={item}
+                  onClick={() => handleClick(childId)}
+                >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText>{childId}</ListItemText>
                 </ListItemButton>

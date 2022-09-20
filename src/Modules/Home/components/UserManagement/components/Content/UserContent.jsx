@@ -116,15 +116,11 @@ export default function Content() {
               />
             </Grid>
             <Grid item>
-              <Button
-                onClick={() => {
-                  navigate('admin/addUser');
-                }}
-                variant="contained"
-                sx={{ mr: 1 }}
-              >
-                Add User
-              </Button>
+              <Link to="addUser">
+                <Button variant="contained" sx={{ mr: 1 }}>
+                  Add User
+                </Button>
+              </Link>
               <Tooltip title="Reload">
                 <IconButton>
                   <RefreshIcon color="inherit" sx={{ display: 'block' }} />
@@ -170,19 +166,21 @@ export default function Content() {
                       <TableCell align="left">{user.email}</TableCell>
                       <TableCell align="left">{user.matKhau}</TableCell>
                       <TableCell align="left">{user.soDT}</TableCell>
-                      <TableCell align="center">{user.maLoaiNguoiDung}</TableCell>
+                      <TableCell align="center">
+                        {user.maLoaiNguoiDung}
+                      </TableCell>
                       <TableCell align="center">
                         <Link to={`updateUser/${user.taiKhoan}`}>
                           <EditIcon
                             className="mr-2 cursor-pointer"
-                            sx={{ color: 'blue', fontSize : '30px' }}
+                            sx={{ color: 'blue', fontSize: '30px' }}
                           />
                         </Link>
                         <UserConfirmPopUp
-                                userData={user}
-                                isOpen={false}
-                                onClose={handleClose}
-                              />
+                          userData={user}
+                          isOpen={false}
+                          onClose={handleClose}
+                        />
                       </TableCell>
                     </TableRow>
                   );
